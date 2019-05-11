@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="asansor" default="all">
+  
+  
+  <property file="asansor.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+    <include name="*.swc"/>
+    <include name="*.war"/>
+    <include name="*.zip"/>
+    <include name="*.ane"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module Asansor -->
+  
+  <dirname property="module.asansor.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.asansor" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.asansor" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.asansor" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.asansor" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="asansor.output.dir" value="${module.asansor.basedir}/out/production/Asansor"/>
+  <property name="asansor.testoutput.dir" value="${module.asansor.basedir}/out/test/Asansor"/>
+  
+  <path id="asansor.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="asansor.module.production.classpath">
+    <path refid="${module.jdk.classpath.asansor}"/>
+  </path>
+  
+  <path id="asansor.runtime.production.module.classpath">
+    <pathelement location="${asansor.output.dir}"/>
+  </path>
+  
+  <path id="asansor.module.classpath">
+    <path refid="${module.jdk.classpath.asansor}"/>
+    <pathelement location="${asansor.output.dir}"/>
+  </path>
+  
+  <path id="asansor.runtime.module.classpath">
+    <pathelement location="${asansor.testoutput.dir}"/>
+    <pathelement location="${asansor.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.asansor">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.asansor">
+    <patternset refid="excluded.from.module.asansor"/>
+  </patternset>
+  
+  <path id="asansor.module.sourcepath">
+    <dirset dir="${module.asansor.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.asansor" depends="compile.module.asansor.production,compile.module.asansor.tests" description="Compile module Asansor"/>
+  
+  <target name="compile.module.asansor.production" depends="register.custom.compilers" description="Compile module Asansor; production classes">
+    <mkdir dir="${asansor.output.dir}"/>
+    <javac2 destdir="${asansor.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.asansor}/javac">
+      <compilerarg line="${compiler.args.asansor}"/>
+      <bootclasspath refid="asansor.module.bootclasspath"/>
+      <classpath refid="asansor.module.production.classpath"/>
+      <src refid="asansor.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.asansor"/>
+    </javac2>
+    
+    <copy todir="${asansor.output.dir}">
+      <fileset dir="${module.asansor.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.asansor.tests" depends="register.custom.compilers,compile.module.asansor.production" description="compile module Asansor; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.asansor" description="cleanup module">
+    <delete dir="${asansor.output.dir}"/>
+    <delete dir="${asansor.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.asansor" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.asansor" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>
